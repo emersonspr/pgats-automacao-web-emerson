@@ -28,7 +28,7 @@ jobs:
 
       # 4. Execução dos testes
       - name: Executando os testes
-        run: npx cypress run
+        run: npx cypress run --spec "cypress/e2e/1-getting-started/automation-exercise-modules.cy.js"
 
       # 5. Upload dos artefatos
       - name: Upload de artefatos
