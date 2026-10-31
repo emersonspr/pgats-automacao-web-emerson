@@ -6,7 +6,7 @@
   "scripts": {
   "test": "cypress run",
   "test:modules": "cypress run --spec \"cypress/e2e/1-getting-started/automation-exercise-modules.cy.js\"",
-  "report:clean": "rm -rf cypress/results cypress/reports",
+  "report:clean": "rm -rf cypress/results cypress/reports cypress/reports-data",
   "report:merge": "mkdir -p cypress/reports-data && mochawesome-merge \"cypress/results/*.json\" --output cypress/reports-data/report.json",
   "report:generate": "marge cypress/reports-data/report.json --reportDir cypress/reports --reportFilename index"
   },
