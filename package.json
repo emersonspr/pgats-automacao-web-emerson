@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "test": "cypress run",
+  "test:modules": "cypress run --spec \"cypress/e2e/1-getting-started/automation-exercise-modules.cy.js\"",
+  "report:clean": "rm -rf cypress/results cypress/reports",
+  "report:merge": "mkdir -p cypress/reports-data && mochawesome-merge \"cypress/results/*.json\" --output cypress/reports-data/report.json",
+  "report:generate": "marge cypress/reports-data/report.json --reportDir cypress/reports --reportFilename index"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "cypress": "^13.7.3"
+    "cypress": "^13.7.3",
+    "mochawesome": "^8.1.1",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2"
   }
 }

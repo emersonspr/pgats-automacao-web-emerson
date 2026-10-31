@@ -1,12 +1,12 @@
+# Dependências
 node_modules/
-log
-results
 
-# Cypress generated artifacts
-cypress/reports
-cypress/screenshots/
-cypress/downloads/
-
-npm_install_debug.log
-
+# Arquivos do macOS
 .DS_Store
+
+# Relatórios e evidências gerados pelo Cypress
+cypress/results/
+cypress/reports/
+cypress/reports-data/
+cypress/screenshots/
+cypress/videos/
