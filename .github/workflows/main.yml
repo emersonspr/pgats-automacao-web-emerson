@@ -23,23 +23,53 @@ jobs:
       # 3. Instalação das dependências
       - name: Instalar dependências
         run: npm ci
-        env:
-          NODE_ENV: development
 
-      # 4. Execução de um arquivo específico de testes
+      # 4. Limpeza dos relatórios anteriores
+      - name: Limpar relatórios anteriores
+        run: npm run report:clean
+
+      # 5. Execução dos testes
       - name: Executar testes E2E
-        run: npx cypress run --spec "cypress/e2e/1-getting-started/automation-exercise-modules.cy.js"
+        id: cypress
+        continue-on-error: true
+        run: npm run test:modules
 
-      # 5. Upload dos relatórios, screenshots e vídeos
-      - name: Upload de artefatos
+      # 6. Consolidação dos resultados
+      - name: Consolidar resultados
+        if: ${{ always() }}
+        run: |
+          if compgen -G "cypress/results/*.json" > /dev/null; then
+            npm run report:merge
+          else
+            echo "Nenhum relatório JSON foi gerado."
+          fi
+
+      # 7. Geração do relatório HTML
+      - name: Gerar relatório HTML
+        if: ${{ always() }}
+        run: |
+          if [ -f cypress/reports-data/report.json ]; then
+            npm run report:generate
+          else
+            echo "Relatório consolidado não encontrado."
+          fi
+
+      # 8. Publicação dos relatórios e evidências
+      - name: Publicar relatórios
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ always() }}
         with:
-          name: relatorios
+          name: relatorios-mochawesome
           path: |
             cypress/reports/
+            cypress/reports-data/
+            cypress/results/
             cypress/screenshots/
             cypress/videos/
           if-no-files-found: warn
           retention-days: 7
-          
+
+      # 9. Preservar o status de falha dos testes
+      - name: Verificar resultado dos testes
+        if: ${{ always() && steps.cypress.outcome == 'failure' }}
+        run: exit 1
